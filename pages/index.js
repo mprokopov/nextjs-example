@@ -1,6 +1,19 @@
 import Head from 'next/head'
+import Link from 'next/link'
+import Image from 'next/image'
+import Message from '../components/message'
+import { getSortedPostsData } from '../lib/posts'
 
-export default function Home() {
+export async function getStaticProps() {
+  const allPostsData = getSortedPostsData()
+  return {
+    props: {
+      allPostsData
+    }
+  }
+}
+
+export default function Home({ allPostsData }) {
   return (
     <div className="container">
       <Head>
@@ -9,13 +22,31 @@ export default function Home() {
       </Head>
 
       <main>
-        <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+     
+      <h1 className="title">
+  Read{' '}
+  <Link href="/posts/first-post">
+    <a>this page!</a>
+  </Link>
+</h1>
+{allPostsData.map(({id, date, title})=>(
+<Message key={id} title={title} message={date}/>
+))}
+        <form>
+          <input className="border border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"/>
+          <button className="bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50 ...">
+      Sign up
+        </button>
+        </form>
 
         <p className="description">
           Get started by editing <code>pages/index.js</code>
         </p>
+
+        <Image 
+        height={200}
+        width={200}
+        src="/images/me.jpg" alt="Your Name" />
 
         <div className="grid">
           <a href="https://nextjs.org/docs" className="card">
